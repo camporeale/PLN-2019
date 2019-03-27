@@ -79,25 +79,19 @@ class NGram(LanguageModel):
         prev_tokens -- the previous n-1 tokens (optional only if n = 1).
         """
         # WORK HERE!!
+        probability = 0
         if prev_tokens == None:
-            if self._n == 1:
-                token_counts = self._count.get((token,))
-                prev_counts  = self._count.get(tuple())
-                if token_counts == None:
-                    probability = 0
-                else:
-                    probability = float(token_counts / prev_counts)
-            else:
-                probability = "requires previous tokens"
-        else:
-            ngram = tuple(list(prev_tokens) + [token])
-            ngram_counts = self._count.get(ngram)
-            prev_counts  = self._count.get(tuple(prev_tokens))
-            if ngram_counts == None:
-                probability = 0
-            else:
-                probability = float(ngram_counts/prev_counts)
+            prev_tokens = tuple()
 
+        ngram = tuple(list(prev_tokens) + [token])
+        ngram_counts = self._count.get(ngram)
+        print(ngram, ngram_counts)
+        prev_counts  = self._count.get(tuple(prev_tokens))
+        print(prev_tokens, prev_counts)
+        if ngram_counts == None:
+            probability = 0
+        else:
+            probability = float(ngram_counts/prev_counts)
         
         return probability
 
