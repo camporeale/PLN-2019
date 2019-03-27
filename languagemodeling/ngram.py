@@ -7,9 +7,10 @@ class LanguageModel(object):
 
     def sent_prob(self, sent):
         """Probability of a sentence. Warning: subject to underflow problems.
-
+        
         sent -- the sentence as a list of tokens.
         """
+        
         return 0.0
 
     def sent_log_prob(self, sent):
@@ -54,6 +55,13 @@ class NGram(LanguageModel):
         count = defaultdict(int)
 
         # WORK HERE!!
+        for sent in sents:
+            sent = ["<s>"] * (n-1) + sent + ["</s>"]
+            for i in range(len(sent) - n + 1):
+                ngram = tuple(sent[i:i+n])
+                ngram_1= tuple(sent[i:i+n-1])
+                count[ngram] += 1
+                count[ngram_1]+= 1         
 
         self._count = dict(count)
 
@@ -71,6 +79,29 @@ class NGram(LanguageModel):
         prev_tokens -- the previous n-1 tokens (optional only if n = 1).
         """
         # WORK HERE!!
+        if prev_tokens == None:
+            if self._n == 1:
+                token_counts = self._count.get((token,))
+                prev_counts  = self._count.get(tuple())
+                if token_counts == None:
+                    probability = 0
+                else:
+                    probability = float(token_counts / prev_counts)
+            else:
+                probability = "requires previous tokens"
+        else:
+            ngram = tuple(list(prev_tokens) + [token])
+            ngram_counts = self._count.get(ngram)
+            prev_counts  = self._count.get(tuple(prev_tokens))
+            if ngram_counts == None:
+                probability = 0
+            else:
+                probability = float(ngram_counts/prev_counts)
+
+        
+        return probability
+
+
 
     def sent_prob(self, sent):
         """Probability of a sentence. Warning: subject to underflow problems.
@@ -79,6 +110,15 @@ class NGram(LanguageModel):
         """
         # WORK HERE !!
 
+        sent = ["<s>"] * (self._n-1) + sent + ["</s>"]
+
+        probability = self.cond_prob(sent[self._n-1], sent[0:self._n-1])
+        for i in range(1, len(sent) - self._n + 1):
+            probability *= self.cond_prob(sent[i+self._n-1],sent[i:i+self._n-1])
+
+        return probability
+
+
     def sent_log_prob(self, sent):
         """Log-probability of a sentence.
 
@@ -86,6 +126,16 @@ class NGram(LanguageModel):
         """
         # WORK HERE!!
 
+        sent = ["<s>"] * (self._n-1) + sent + ["</s>"]
+
+        try:
+            probability = math.log2(self.cond_prob(sent[self._n-1], sent[0:self._n-1]))
+            for i in range(1, len(sent) - self._n + 1):
+                probability += math.log2(self.cond_prob(sent[i+self._n-1],sent[i:i+self._n-1]))
+        except ValueError:
+            return float('-inf')
+
+        return probability
 
 class AddOneNGram(NGram):
 

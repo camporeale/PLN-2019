@@ -16,13 +16,16 @@ Options:
 from docopt import docopt
 import pickle
 
-from nltk.corpus import gutenberg
+#from nltk.corpus import gutenberg
 
 from languagemodeling.ngram import NGram
+from nltk.corpus import PlaintextCorpusReader
 
 
 models = {
     'ngram': NGram,
+    'addone': AddOneNGram,
+    'inter': InterpolatedNGram
 }
 
 
@@ -31,8 +34,10 @@ if __name__ == '__main__':
 
     # load the data
     # WORK HERE!! LOAD YOUR TRAINING CORPUS
-    sents = gutenberg.sents(['austen-emma.txt', 'austen-sense.txt'])
-
+    #sents = gutenberg.sents(['austen-emma.txt', 'austen-sense.txt'])
+    corpus = PlaintextCorpusReader('.', 'eu_parlamento_corpus.txt')
+    sents = corpus.sents()
+    
     # train the model
     n = int(opts['-n'])
     model_class = models[opts['-m']]
