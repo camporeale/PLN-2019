@@ -82,12 +82,10 @@ class NGram(LanguageModel):
         probability = 0
         if prev_tokens == None:
             prev_tokens = tuple()
-
+    
         ngram = tuple(list(prev_tokens) + [token])
         ngram_counts = self._count.get(ngram)
-        print(ngram, ngram_counts)
         prev_counts  = self._count.get(tuple(prev_tokens))
-        print(prev_tokens, prev_counts)
         if ngram_counts == None:
             probability = 0
         else:
