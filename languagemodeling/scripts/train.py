@@ -15,12 +15,11 @@ Options:
 """
 from docopt import docopt
 import pickle
+import sys
+sys.path.append('/home/camporeale/ML/Cursos/plnFamaf2019/PLN-2019/languagemodeling')
 
-#from nltk.corpus import gutenberg
-
-from languagemodeling.ngram import NGram
+from ngram import NGram, AddOneNGram, InterpolatedNGram
 from nltk.corpus import PlaintextCorpusReader
-
 
 models = {
     'ngram': NGram,
@@ -34,7 +33,6 @@ if __name__ == '__main__':
 
     # load the data
     # WORK HERE!! LOAD YOUR TRAINING CORPUS
-    #sents = gutenberg.sents(['austen-emma.txt', 'austen-sense.txt'])
     corpus = PlaintextCorpusReader('.', 'eu_parlamento_corpus.txt')
     sents = corpus.sents()
     

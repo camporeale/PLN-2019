@@ -11,8 +11,9 @@ Options:
 """
 from docopt import docopt
 import pickle
-
-from languagemodeling.ngram_generator import NGramGenerator
+import sys
+sys.path.append('/home/camporeale/ML/Cursos/plnFamaf2019/PLN-2019/languagemodeling')
+from ngram_generator import NGramGenerator
 
 
 if __name__ == '__main__':

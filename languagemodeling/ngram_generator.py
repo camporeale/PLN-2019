@@ -30,12 +30,10 @@ class NGramGenerator(object):
             probs[prevtokens][lasttoken] = prob
 
         self._probs = dict(probs)
-        print(probs)
         # sort in descending order for efficient sampling
         self._sorted_probs = sorted_probs = {}
         # WORK HERE!!
 
-        print(probs)
         for prob in probs.items():
            # print(prob[1])
             sorted_value = sorted(prob[1].items(), key=operator.itemgetter(1))
