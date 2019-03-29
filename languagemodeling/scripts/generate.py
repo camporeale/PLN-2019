@@ -27,6 +27,7 @@ if __name__ == '__main__':
 
     # build generator
     generator = NGramGenerator(model)
+    #print(generator._probs[()]['</s>'])
 
     # generate sentences
     n = int(opts['-n'])

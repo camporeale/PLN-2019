@@ -5,6 +5,12 @@ import math
 
 class LanguageModel(object):
 
+    def __init__(self, n, sents):
+        """
+        n -- order of the model.
+        sents -- list of sentences, each one being a list of tokens.
+        """
+
     def sent_prob(self, sent):
         """Probability of a sentence. Warning: subject to underflow problems.
         
@@ -54,16 +60,18 @@ class NGram(LanguageModel):
 
         count = defaultdict(int)
 
+
         # WORK HERE!!
+        
         for sent in sents:
             sent = ["<s>"] * (n-1) + sent + ["</s>"]
             for i in range(len(sent) - n + 1):
                 ngram = tuple(sent[i:i+n])
                 ngram_1= tuple(sent[i:i+n-1])
                 count[ngram] += 1
-                count[ngram_1]+= 1         
-
+                count[ngram_1]+= 1
         self._count = dict(count)
+
 
     def count(self, tokens):
         """Count for an n-gram or (n-1)-gram.
@@ -82,7 +90,7 @@ class NGram(LanguageModel):
         probability = 0
         if prev_tokens == None:
             prev_tokens = tuple()
-    
+
         ngram = tuple(list(prev_tokens) + [token])
         ngram_counts = self._count.get(ngram)
         prev_counts  = self._count.get(tuple(prev_tokens))
@@ -137,17 +145,29 @@ class AddOneNGram(NGram):
         sents -- list of sentences, each one being a list of tokens.
         """
         # call superclass to compute counts
-        super().__init__(n, sents)
+        count = defaultdict(int)
 
         # compute vocabulary
         self._voc = voc = set()
         # WORK HERE!!
+        voc.add("</s>") 
+
+        for sent in sents:
+            voc.update(sent)
+            sent = ["<s>"] * (n-1) + sent + ["</s>"]
+            for i in range(len(sent) - n + 1):
+                ngram = tuple(sent[i:i+n])
+                ngram_1= tuple(sent[i:i+n-1])
+                count[ngram] += 1
+                count[ngram_1]+= 1
+        self._count = dict(count)
 
         self._V = len(voc)  # vocabulary size
 
     def V(self):
         """Size of the vocabulary.
         """
+
         return self._V
 
     def cond_prob(self, token, prev_tokens=None):
@@ -157,7 +177,23 @@ class AddOneNGram(NGram):
         prev_tokens -- the previous n-1 tokens (optional only if n = 1).
         """
         # WORK HERE!!
+        probability = 0
+        if prev_tokens == None:
+            prev_tokens = tuple()
 
+
+        ngram = tuple(list(prev_tokens) + [token])
+        ngram_counts = self._count.get(ngram)
+        prev_counts  = self._count.get(tuple(prev_tokens))
+
+        if ngram_counts is None:
+            ngram_counts = 0
+        if prev_counts is None:
+            prev_counts = 0
+
+        probability = float((ngram_counts+1)/(prev_counts+self._V))
+        
+        return probability
 
 class InterpolatedNGram(NGram):
 

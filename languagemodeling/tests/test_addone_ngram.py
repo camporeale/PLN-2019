@@ -73,6 +73,7 @@ class TestAddOneNGram(TestCase):
             'salame': 1.0 / (12.0 + 9.0),
         }
         for token, p in probs.items():
+            print(token)
             self.assertAlmostEqual(model.cond_prob(token), p)
 
     def test_cond_prob_2gram(self):
@@ -101,8 +102,10 @@ class TestAddOneNGram(TestCase):
         tokens = {'el', 'gato', 'come', 'pescado', '.', 'la', 'gata', 'salmón', '</s>'}
 
         for prev in list(tokens) + ['<s>']:
+            print(prev)
             prob_sum = sum(model.cond_prob(token, (prev,)) for token in tokens)
             # prob_sum < 1.0 or almost equal to 1.0:
+
             self.assertTrue(prob_sum < 1.0 or abs(prob_sum - 1.0) < 1e-10)
 
     def test_norm_3gram(self):

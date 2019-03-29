@@ -21,7 +21,6 @@ class NGramGenerator(object):
             if len(ngram) == n:
                 ngrams.append(ngram)
 
-
         for ngram in ngrams:
             lasttoken  = ngram[n-1]
             prevtokens = ngram[:n-1]
@@ -35,10 +34,7 @@ class NGramGenerator(object):
         # WORK HERE!!
 
         for prob in probs.items():
-           # print(prob[1])
-            sorted_value = sorted(prob[1].items(), key=operator.itemgetter(1))
-           # print(sorted_value)
-
+            sorted_value = sorted(prob[1].items(), key=operator.itemgetter(1),reverse=True)
             sorted_probs[prob[0]] = sorted_value  
 
 
@@ -49,12 +45,14 @@ class NGramGenerator(object):
         """Randomly generate a sentence."""
         # WORK HERE!!
 
-        token = ""
         sent = ["<s>"] * (n - 1)
 
-        while token != "</s>":
+        while True:
             token = self.generate_token(tuple(sent[1-n:]))
             sent.append(token)
+        #    print(sent)
+            if sent[-1] == "</s>": break
+
 
         return sent[n-1:-1]            
 
@@ -72,12 +70,12 @@ class NGramGenerator(object):
 
         ptoken = []
         probs = []
-
         for t, p in tokens:
             ptoken.append(t)
             probs.append(p)
 
+  #      print(tokens[:10])
         choice = random.choice(ptoken, 1, probs)
-
+        #print(choice)
         return  choice[0]
 
