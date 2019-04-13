@@ -102,7 +102,6 @@ class TestAddOneNGram(TestCase):
         tokens = {'el', 'gato', 'come', 'pescado', '.', 'la', 'gata', 'salmón', '</s>'}
 
         for prev in list(tokens) + ['<s>']:
-            print(prev)
             prob_sum = sum(model.cond_prob(token, (prev,)) for token in tokens)
             # prob_sum < 1.0 or almost equal to 1.0:
 

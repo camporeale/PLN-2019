@@ -104,8 +104,12 @@ class TestInterpolatedNGram(TestCase):
         tokens = {'el', 'gato', 'come', 'pescado', '.', 'la', 'gata', 'salmón', '</s>'}
 
         for model in models:
+            if model._addone == True:
+                for token in tokens:
+                    print(token, model.cond_prob(token))
             prob_sum = sum(model.cond_prob(token) for token in tokens)
             # prob_sum < 1.0 or almost equal to 1.0:
+            #print(prob_sum)
             self.assertAlmostLessEqual(prob_sum, 1.0)
 
     def test_norm_2gram(self):
@@ -129,6 +133,8 @@ class TestInterpolatedNGram(TestCase):
             for prev in prevs:
                 prob_sum = sum(model.cond_prob(token, (prev,)) for token in tokens)
                 # prob_sum < 1.0 or almost equal to 1.0:
+
+
                 self.assertAlmostLessEqual(prob_sum, 1.0, msg=prev)
 
     def test_norm_3gram(self):
@@ -155,6 +161,7 @@ class TestInterpolatedNGram(TestCase):
             for prev in prevs:
                 prob_sum = sum(model.cond_prob(token, prev) for token in tokens)
                 # prob_sum < 1.0 or almost equal to 1.0:
+              #  print(prob_sum)
                 self.assertAlmostLessEqual(prob_sum, 1.0, msg=prev)
 
     def test_held_out(self):
