@@ -33,50 +33,50 @@ Ejercicio 2: Modelo de n-gramas
 ================================
 
 En la clase NGram implementamos las siguientes funciones: 
-	init: agregamos tokens especiales de inicio "<s>" y fin "</s>" a cada sentencia, creamos el diccionario con el conteo de n-gramas y n-1 gramas necesarios para poder realizar los cálculos de probabilidades
-	count: retornamos el conteo correspondiente al n-grama o n-1 grama provisto
-	cond_prob: calculamos la probabilidad de un ngrama en base a los counts tomados en init
-	sent_prob: calculamos probabilidad de la sentencia multiplicando la probabilidad de todos los ngramas que encontramos en la misma  
-	sent_prob_log: calculamos log probabilidad de la sentencia sumando log probabilidad de todos los ngramas
+	- init: agregamos tokens especiales de inicio "<s>" y fin "</s>" a cada sentencia, creamos el diccionario con el conteo de n-gramas y n-1 gramas necesarios para poder realizar los cálculos de probabilidades
+	- count: retornamos el conteo correspondiente al n-grama o n-1 grama provisto
+	- cond_prob: calculamos la probabilidad de un ngrama en base a los counts tomados en init
+	- sent_prob: calculamos probabilidad de la sentencia multiplicando la probabilidad de todos los ngramas que encontramos en la misma  
+	- sent_prob_log: calculamos log probabilidad de la sentencia sumando log probabilidad de todos los ngramas
 
  
 Ejercicio 3: Generación de Texto
 ================================
 En la clase NGramGenerator implementamos:
 
-	init: obtenemos todos los ngramas del modelo, calculamos sus probabilidades correspondientes y las almacenamos en un diccionario
-	generate_token: dado tokens iniciales, seleccionamos un nuevo token al azar en base a las probabilidades almacenadas en el diccionario
-	generate_sent: iteramos con generate_token comenzando con ngrama-1 caracteres de inicio "<s>", hasta que se genere un caracter de fin de sentencia "</s"
+	- init: obtenemos todos los ngramas del modelo, calculamos sus probabilidades correspondientes y las almacenamos en un diccionario
+	- generate_token: dado tokens iniciales, seleccionamos un nuevo token al azar en base a las probabilidades almacenadas en el diccionario
+	- generate_sent: iteramos con generate_token comenzando con ngrama-1 caracteres de inicio "<s>", hasta que se genere un caracter de fin de sentencia "</s"
 
 
 	Unigrama:
 	--------
 	 - "unívocamente olvidar en corremos importante mercancía valorar con su judicial hombre de que Es Unión"
-	 - 	"enmiendas sanitarias de , la de comparables En Necesitamos de sobre paro a esta un . las común Roja De de enmiendas Unión , humanos que a líneas ningún que y"
-	 - 	"de hoy que 9"
-	 - 	"que posibilidades los lo puedo Sin en los este penas hace sobre sentido entre . de en"
+	 - "enmiendas sanitarias de , la de comparables En Necesitamos de sobre paro a esta un . las común Roja De de enmiendas Unión , humanos que a líneas ningún que y"
+	 - "de hoy que 9"
+	 - "que posibilidades los lo puedo Sin en los este penas hace sobre sentido entre . de en"
 
 	Bigramas:
 	--------
-	 - 	"Al igual que tener que este proceso de objetivo de fondo las solicitudes de que los productos no es decir Sound Economic Management )."
-	 - 	"El PNB , si es una evaluación de carbono - al estudiarlas ."
-	 - 	"Gracias , esas críticas a continuación las fuentes de toma de intervenir , de las dos veces no ?"
-	 - 	"La cual equivale a la única no agrade a favor de conformidad con algunas veces ."
+	 - "Al igual que tener que este proceso de objetivo de fondo las solicitudes de que los productos no es decir Sound Economic Management )."
+	 - "El PNB , si es una evaluación de carbono - al estudiarlas ."
+	 - "Gracias , esas críticas a continuación las fuentes de toma de intervenir , de las dos veces no ?"
+	 - "La cual equivale a la única no agrade a favor de conformidad con algunas veces ."
 
 	Trigramas:
 	--------
-	 - 	"Si no hay legislación comunitaria consagró la posibilidad de hacerlo."
-	 - 	"Señor Presidente , estimados , aunque los servicios postales o en Asia ha modificado los aspectos de esta Asamblea."
-	 - 	"De acuerdo con la mayor brevedad , permítame en primer lugar , que luego no otra cosa."
-	 - 	"No me apasiono con este principio del domingo 12 de mayo de 1998 , para nosotros son extraordinariamente escasos."
+	 - "Si no hay legislación comunitaria consagró la posibilidad de hacerlo."
+	 - "Señor Presidente , estimados , aunque los servicios postales o en Asia ha modificado los aspectos de esta Asamblea."
+	 - "De acuerdo con la mayor brevedad , permítame en primer lugar , que luego no otra cosa."
+	 - "No me apasiono con este principio del domingo 12 de mayo de 1998 , para nosotros son extraordinariamente escasos."
 
 
 	Cuatrigramas:
 	--------
-	 - 	"Cabe partir del principio de justicia universal y , entre otras , las enmiendas 10 , 15 y la 16 -, que nos parecen esenciales : la vigilancia multilateral , las grandes potencias , incluidas las organizaciones no gubernamentales que hubiera tenido que merecer un tratamiento por separado."
-	 - 	"En relación con estas tendencias futuras."
-	 - 	"Por eso , los hijos son un bien público , tienen que aprobarse todas las enmiendas presentadas por la Sra."
-	 - 	"Con la ayuda de cooperación en el ámbito audiovisual."
+	 - "Cabe partir del principio de justicia universal y , entre otras , las enmiendas 10 , 15 y la 16 -, que nos parecen esenciales : la vigilancia multilateral , las grandes potencias , incluidas las organizaciones no gubernamentales que hubiera tenido que merecer un tratamiento por separado."
+	 - "En relación con estas tendencias futuras."
+	 - "Por eso , los hijos son un bien público , tienen que aprobarse todas las enmiendas presentadas por la Sra."
+	 - "Con la ayuda de cooperación en el ámbito audiovisual."
 
 
 Ejercicio 4: Suavizado "add-one"
