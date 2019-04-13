@@ -22,21 +22,23 @@ class NGramGenerator(object):
                 ngrams.append(ngram)
 
         for ngram in ngrams:
-            lasttoken  = ngram[n-1]
+            token  = ngram[n-1]
             prevtokens = ngram[:n-1]
-            prob       = model.cond_prob(lasttoken, prevtokens)
+            prob       = model.cond_prob(token, tuple(prevtokens))
 
-            probs[prevtokens][lasttoken] = prob
+            probs[prevtokens][token] = prob
 
         self._probs = dict(probs)
         # sort in descending order for efficient sampling
         self._sorted_probs = sorted_probs = {}
         # WORK HERE!!
+        #print(probs,"\n")
 
         for prob in probs.items():
+            #print(prob)
             sorted_value = sorted(prob[1].items(), key=operator.itemgetter(1),reverse=True)
+            #print(sorted_value)
             sorted_probs[prob[0]] = sorted_value  
-
 
 
     def generate_sent(self):
@@ -46,11 +48,15 @@ class NGramGenerator(object):
         # WORK HERE!!
 
         sent = ["<s>"] * (n - 1)
-
+        #print(sent)
+        #print(sent[1-n:])
         while True:
-            token = self.generate_token(tuple(sent[1-n:]))
+            #print(sent[1-n:])
+            if n == 1:
+                token = self.generate_token()
+            else:
+                token = self.generate_token(tuple(sent[1-n:]))
             sent.append(token)
-        #    print(sent)
             if sent[-1] == "</s>": break
 
 
@@ -61,21 +67,24 @@ class NGramGenerator(object):
         """Randomly generate a token, given prev_tokens.
         prev_tokens -- the previous n-1 tokens (optional only if n = 1).
         """
-
         n = self._n
-        if n == 1 or prev_tokens == None:
+        if n == 1 or prev_tokens is None:
             prev_tokens = tuple()
 
         tokens = self._sorted_probs[prev_tokens]
-
         ptoken = []
         probs = []
         for t, p in tokens:
             ptoken.append(t)
             probs.append(p)
 
-  #      print(tokens[:10])
-        choice = random.choice(ptoken, 1, probs)
-        #print(choice)
+       # print(ptoken[0:10],probs[0:10],sum(probs))
+       #print(sum(probs))
+        #import pdb; pdb.set_trace()
+        choice = random.choice(ptoken, size=1, p=probs)
+       # print(choice[0])
         return  choice[0]
+
+
+
 

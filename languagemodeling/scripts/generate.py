@@ -27,10 +27,10 @@ if __name__ == '__main__':
 
     # build generator
     generator = NGramGenerator(model)
-    #print(generator._probs[()]['</s>'])
+    #print(sum([x for x in generator._probs[()].values()]))
 
     # generate sentences
     n = int(opts['-n'])
     for i in range(n):
         sent = generator.generate_sent()
-        print(' '.join(sent))
+        print(" ".join(sent))

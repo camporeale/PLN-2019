@@ -11,9 +11,11 @@ Options:
 from docopt import docopt
 import pickle
 import math
+import sys
+from nltk.corpus import PlaintextCorpusReader
+sys.path.append('/home/camporeale/ML/Cursos/plnFamaf2019/PLN-2019/languagemodeling')
 
-from nltk.corpus import gutenberg
-
+from ngram import NGram, AddOneNGram, InterpolatedNGram
 
 if __name__ == '__main__':
     opts = docopt(__doc__)
@@ -26,14 +28,15 @@ if __name__ == '__main__':
 
     # load the data
     # WORK HERE!! LOAD YOUR EVALUATION CORPUS
-    sents = gutenberg.sents('austen-persuasion.txt')
+    corpus = PlaintextCorpusReader('.', 'euro_eval.txt')
+    sents = corpus.sents()
 
     # compute the cross entropy
     # WORK HERE!!
-    log_prob = None
-    e = None
-    p = None
+    
+    log_prob, e, p = model.perplexity(sents)
 
-    print('Log probability: {}'.format(log_prob))
-    print('Cross entropy: {}'.format(e))
-    print('Perplexity: {}'.format(p))
+
+    print('Log probability: {0:.2f}'.format(log_prob))
+    print('Cross entropy: {0:.2f}'.format(e))
+    print('Perplexity: {0:.2f}'.format(p))
