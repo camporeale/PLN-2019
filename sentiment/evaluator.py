@@ -2,7 +2,6 @@ from collections import namedtuple
 
 from sklearn.metrics import confusion_matrix
 
-
 def f1(prec, rec):
     if prec + rec > 0.0:
         result = 2 * prec * rec / (prec + rec)
@@ -92,3 +91,23 @@ class Evaluator(object):
             for j, label2 in enumerate(labels):
                 print('{}\t'.format(CM[i, j]), end='')
             print('')
+
+    def get_results(self):
+        labels = self._labels
+        metrics = self._label_metrics
+        acc = self._acc
+        macro_prec = self._macro_prec
+        macro_rec = self._macro_rec
+
+        experiment_results = []
+
+        for label in labels:
+            m = metrics[label]
+            experiment_results.extend([m.prec,m.rec, f1(m.prec, m.rec)])
+
+        experiment_results.extend([acc, macro_prec, macro_rec, f1(macro_prec, macro_rec)])
+
+        return experiment_results
+
+
+
