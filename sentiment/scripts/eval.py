@@ -15,6 +15,9 @@ from docopt import docopt
 import pickle
 from pprint import pprint
 from collections import defaultdict
+import sys
+
+sys.path.append("/home/camporeale/ML/Cursos/plnFamaf2019/PLN-2019/")
 
 from sentiment.evaluator import Evaluator
 from sentiment.tass import InterTASSReader
@@ -36,6 +39,9 @@ if __name__ == '__main__':
     reader = InterTASSReader(corpus)
     X, y_true = list(reader.X()), list(reader.y())
 
+    # normalize
+    X = model.normalize(X)
+
     # classify
     y_pred = model.predict(X)
 
@@ -53,9 +59,16 @@ if __name__ == '__main__':
     # Save results to file
     my_file = Path("results.csv")
     f_exists =  my_file.is_file()
-
     res = evaluator.get_results()
-    res.insert(0,opts['-c'])
+
+    if "ES" in opts['-c']:
+      corpus = "ES"
+    elif "PE" in opts['-c']:
+      corpus = "PE"
+    else:
+      corpus = "CR"
+
+    res.insert(0,corpus)
     res.insert(1,opts['-i'])
     res.insert(2,opts['-d'])
 
@@ -66,8 +79,8 @@ if __name__ == '__main__':
     else:
       df = pd.read_csv("results.csv")
 
-    df.loc[-1] = res
-    df.to_csv("results.csv")
+    df.loc[len(df)] = res
+    df.to_csv("results.csv",index=False)
 
 
     

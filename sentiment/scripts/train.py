@@ -18,10 +18,13 @@ Options:
 """
 from docopt import docopt
 import pickle
+import sys
 
+sys.path.append("/home/camporeale/ML/Cursos/plnFamaf2019/PLN-2019/")
 from sentiment.tass import InterTASSReader
 from sentiment.baselines import MostFrequent
 from sentiment.classifier import SentimentClassifier
+from nltk import word_tokenize
 
 
 models = {
@@ -45,6 +48,8 @@ if __name__ == '__main__':
     else:
         model = models[model_type]()  # baseline
 
+    X = model.normalize(X)
+    
     model.fit(X, y)
 
     # save model

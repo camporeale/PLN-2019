@@ -7,7 +7,7 @@ Ejercicio 1
 
 Creamos el script stats.py, el mismo produce el siguiente output en el conjunto 
 
-python stats.py -c /home/camporeale/ML/Cursos/plnFamaf2019/PLN-2019/sentiment/InterTASS
+python stats.py -c ./sentiment/InterTASS
 Corpus ES
   Length: 1008
    Polarity: 
@@ -35,3 +35,16 @@ Corpus PE
 Ejercicio 2
 -----------
 
+Al empezar a hacer las pruebas notamos que la cantidad de ejecuciones necesarias y datos a comparar era muy grande, por lo que decidimos guardar los datos que produce el script eval.py dentro de un csv para poder levantarlo luego como un dataframe y lograr hacer una análisis más sencillo.
+
+Modificamos eval.py para almacenar los datos en el csv, y la clase Evaluator para agregar la función get_results() que devuelve una lista con todos los valores reportados.
+
+0. Resultados de baseline:
+
+    Most Frequent Classifier
+
+
+    Maxent:
+    
+
+1. Mejora de 

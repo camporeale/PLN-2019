@@ -3,7 +3,9 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.svm import LinearSVC
 from sklearn.linear_model import LogisticRegression
-
+from nltk import word_tokenize
+from nltk.corpus import stopwords
+import re
 
 classifiers = {
     'maxent': LogisticRegression,
@@ -20,7 +22,8 @@ class SentimentClassifier(object):
         """
         self._clf = clf
         self._pipeline = pipeline = Pipeline([
-            ('vect', CountVectorizer()),
+            ('vect', CountVectorizer(tokenizer=word_tokenize,binary=True,
+                stop_words=list(stopwords.words('spanish')))),
             ('clf', classifiers[clf]()),
         ])
 
@@ -29,3 +32,16 @@ class SentimentClassifier(object):
 
     def predict(self, X):
         return self._pipeline.predict(X)
+
+    def normalize(self, X):
+        mentions = r'(?:@[^\s]+)'
+        urls = r'(?:https?\://t.co/[\w]+)'
+        newX = X
+
+        for idx, x in enumerate(newX):
+            if '@' in x:
+                newX[idx] = re.sub(mentions, '', x)
+            if "http" in x:
+                newX[idx] = re.sub(urls, '', x)
+
+        return newX
