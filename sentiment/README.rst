@@ -39,12 +39,19 @@ Al empezar a hacer las pruebas notamos que la cantidad de ejecuciones necesarias
 
 Modificamos eval.py para almacenar los datos en el csv, y la clase Evaluator para agregar la función get_results() que devuelve una lista con todos los valores reportados.
 
-0. Resultados de baseline:
+Para las pruebas seleccionamos las siguientes mejoras:
 
-    Most Frequent Classifier
+1. NLTK Tokenizer
+2. Binarización de conteos
+3. Normalización de tweets
+4. Filtrado de stopwords
+
+En la siguiente imagen pueden verse los resultados de cada una de las pruebas:
+
+https://github.com/camporeale/PLN-2019/blob/master/sentiment/results.png
+
+En líneas generales podemos decir que la mayoría de los cambios aportan similares mejoras en accuracy, siendo el uso de NLTK Tokenizer el que aportó la mayor ganancia (55.73 acc para corpus ES)
+
+La combinación de los 4 cambios produjo resultados ligeramente inferiores a este.
 
 
-    Maxent:
-    
-
-1. Mejora de 
