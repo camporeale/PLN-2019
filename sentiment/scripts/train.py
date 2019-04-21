@@ -48,8 +48,8 @@ if __name__ == '__main__':
     else:
         model = models[model_type]()  # baseline
 
-    X = model.normalize(X)
-    
+    #X = model.normalize(X)
+
     model.fit(X, y)
 
     # save model

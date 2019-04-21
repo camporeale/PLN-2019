@@ -40,7 +40,7 @@ if __name__ == '__main__':
     X, y_true = list(reader.X()), list(reader.y())
 
     # normalize
-    X = model.normalize(X)
+    #X = model.normalize(X)
 
     # classify
     y_pred = model.predict(X)

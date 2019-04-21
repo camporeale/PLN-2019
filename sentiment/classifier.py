@@ -22,8 +22,7 @@ class SentimentClassifier(object):
         """
         self._clf = clf
         self._pipeline = pipeline = Pipeline([
-            ('vect', CountVectorizer(tokenizer=word_tokenize,binary=True,
-                stop_words=list(stopwords.words('spanish')))),
+            ('vect', CountVectorizer(tokenizer=word_tokenize)),
             ('clf', classifiers[clf]()),
         ])
 
