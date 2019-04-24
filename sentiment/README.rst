@@ -1,6 +1,10 @@
 Trabajo Práctico 2 - Análisis de Sentimiento
 ==============================================
 
+El código utilizado en los ejercicios se encuentra en la siguiente notebook:
+
+https://github.com/camporeale/PLN-2019/blob/master/sentiment/Ejercicios%20Practico%202.ipynb
+
 
 Ejercicio 1 - Corpus de Tweets: Estadísticas Básicas
 -------------------------------------------------------
@@ -41,10 +45,17 @@ Modificamos eval.py para almacenar los datos en el csv, y la clase Evaluator par
 
 Para las pruebas seleccionamos las siguientes mejoras:
 
-1. NLTK Tokenizer
+1. NLTK Tokenizer 
 2. Binarización de conteos
-3. Normalización de tweets
-4. Filtrado de stopwords
+3. Filtrado de stopwords
+4. Normalización de tweets
+
+
+  - Los tres primeros se implementaron como opciones del vectorizador en la función init de SentimentClassifier:
+
+    CountVectorizer(tokenizer=word_tokenize,binary=True,stop_words=list(stopwords.words('spanish')))
+
+  - La normalización de tweets creando la función normalize() en la misma clase y llamandola desde eval.py y train.py antes de fit() y predict() respectivamente 
 
 En la siguiente imagen pueden verse los resultados de cada una de las pruebas:
 
@@ -56,6 +67,13 @@ En líneas generales podemos decir que la mayoría de los cambios aportan simila
 
 Ejercicio 3 - Exploración de Parámetros ("Grid Search")
 -------------------------------------------------------
+
+Los mejores resultados obtenidos fueron:
+
+  - Logistic Regression:  C=0.1, penalty=l2
+  - SVM:                  C=0.01, penalty=l2
+  - NultinomialNB:        alpha=1
+
 
 
 Ejercicio 4 - Inspección de Modelos
@@ -87,4 +105,21 @@ También podemos notar que NEU y NONE incluyen en sus features más positivas pa
 
 Ejercicio 5 - Análisis de Error
 -----------------------------------
+
+Tomamos como ejemplo el siguiente tweet:
+
+"@LaQueSoySiempre @ealbaga Por desgracia vende más  ,riñas,trifulcas,peleas,al cuello!! mátalo!!"
+
+Esta instancia tuvo una predicción de clase "P" con una probabilidad de 0.991105, siendo su clase verdadera "N". Los coeficientes de los features eran los siguientes:
+
+! [-1.00453974 -0.95153362 -0.19846824  1.36069119]
+, [-0.3870915  -0.07526614 -0.39497008  0.50956257]
+@ [-0.37599216 -0.21543827  0.2713075   0.06814566]
+al [ 0.51110109 -0.39551092  0.05058118 -0.4960745 ]
+desgracia [ 0.61744223 -0.21158639 -0.09616715 -0.21244867]
+más [-0.52540095  1.27775123 -1.20268792  0.18649803]
+por [-0.54276769  0.50699498 -0.44647751  0.31744384]
+vende [ 0.38222646 -0.44397838  0.48114509 -0.38853147]
+
+Los que tenían mayor peso en la clasificación como P de la instancia eran "!" y ",". Probamos sacando primero una y luego la otra, pero se mantuvo igual. Cuando removimos ambas, la clasificación cambio a N. El signo de exclamación quizás puede interpretarse como alegría o sorpresa, pero su peso parece desproporcionado. ¿Quizás los tweets con sentimientos positivos suelen hacer uso más común del signo de interrogación?
 
