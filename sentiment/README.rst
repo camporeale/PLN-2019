@@ -121,5 +121,8 @@ más [-0.52540095  1.27775123 -1.20268792  0.18649803]
 por [-0.54276769  0.50699498 -0.44647751  0.31744384]
 vende [ 0.38222646 -0.44397838  0.48114509 -0.38853147]
 
-Los que tenían mayor peso en la clasificación como P de la instancia eran "!" y ",". Probamos sacando primero una y luego la otra, pero se mantuvo igual. Cuando removimos ambas, la clasificación cambio a N. El signo de exclamación quizás puede interpretarse como alegría o sorpresa, pero su peso parece desproporcionado. ¿Quizás los tweets con sentimientos positivos suelen hacer uso más común del signo de interrogación?
+Los que tenían mayor peso en la clasificación como P de la instancia eran "!" y ",". Probamos sacando primero una y luego la otra, pero se mantuvo igual. Cuando removimos ambas, la clasificación cambio a N. El signo de exclamación quizás puede interpretarse como alegría o sorpresa, pero su peso parece desproporcionado. 
 
+Intentemos entrenar una regresión logística eliminando tanto comas como sigos de exclamación, pero los resultados fueron ligeramente peores ¿Quizás los tweets con sentimientos positivos suelen hacer uso más común del signo de interrogación?
+
+  
