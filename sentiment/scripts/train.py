@@ -50,6 +50,7 @@ if __name__ == '__main__':
 
     #X = model.normalize(X)
 
+    
     model.fit(X, y)
 
     # save model

@@ -1,14 +1,14 @@
 """Evaulate a Sentiment Analysis model.
 
 Usage:
-  eval.py -c <corpus> -i <file> -d "comment"
+  eval.py -c <corpus> -i <file> [-f <file>] [-d <comment>]
   eval.py -h | --help
 
 Options:
   -c <corpus>   Evaluation corpus.
   -i <file>     Trained model file.
   -f --final    Use final test set instead of development.
-  -d "improvements" comment improvements to the model
+  -d <comments> comment improvements to the model
   -h --help     Show this screen.
 """
 from docopt import docopt
@@ -17,7 +17,7 @@ from pprint import pprint
 from collections import defaultdict
 import sys
 
-sys.path.append("/home/camporeale/ML/Cursos/plnFamaf2019/PLN-2019/")
+#sys.path.append("/home/camporeale/ML/Cursos/plnFamaf2019/PLN-2019/")
 
 from sentiment.evaluator import Evaluator
 from sentiment.tass import InterTASSReader
@@ -36,7 +36,11 @@ if __name__ == '__main__':
 
     # load evaluation corpus
     corpus = opts['-c']
-    reader = InterTASSReader(corpus)
+    if opts['--final']:
+      reader = InterTASSReader(corpus,res_filename="InterTASS/ES/TASS2017_T1_test_res.qrel")
+    else:
+      reader = InterTASSReader(corpus)
+
     X, y_true = list(reader.X()), list(reader.y())
 
     # normalize

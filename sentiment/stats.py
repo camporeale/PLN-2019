@@ -28,12 +28,9 @@ if __name__ == '__main__':
 
 
     for l, f in corpus.items():
-    	reader = InterTASSReader(f)
-    	X, y_true = list(reader.X()), list(reader.y())
-    	print("Corpus "+ l)
-    	print("\tLength:", len(X))
-    	print("\t Polarity: ")
-
-    	stats = Counter(y_true)
-    	for sent, count in stats.items():
-    		print("\t\t\t", sent , count)
+      reader = InterTASSReader(f)
+      X, y_true = list(reader.X()), list(reader.y())
+      print("Corpus "+ l)
+      print("\tLength:", len(X))
+      stats=dict(Counter(y_true))
+      print("\tPolarity: ", stats)
