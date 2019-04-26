@@ -73,12 +73,14 @@ Ejercicio 4 - Inspección de Modelos
 -----------------------------------
 
 N:
+
 - Coeficientes mas altos: 
       poco sola cosa pobre mismo odio ni feo peor triste
 - Coeficientes más bajos:
       bonito buen guapa encuentre 11:11 irresponsable buena genial algunos voy
 
 NEU:
+
 - Coeficientes mas altos:
       pelado slammactivao encuentre 11:11 imdariusb1tches ineternete crtkftauryn plan nerviosa viejas
 - Coeficientes mas bajos:
@@ -86,12 +88,14 @@ NEU:
 
 
 NONE:
+
 - Coeficientes mas altos:
       fecha ichuso empezado indirecta abstracto caspitoo semana distraído yaaa clrealy
 - Coeficientes más bajos:
       mal buen ser nada serio feliz están más siempre sin
   
 P:
+
 - Coeficientes mas altos:
       buenos mejor enfadada genial feliz irresponsable cariñoso bonito buen guapa
 - Coeficientes mas bajos:
