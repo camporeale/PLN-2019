@@ -98,7 +98,7 @@ class SimpleAncoraCorpusReader(AncoraCorpusReader):
 
     def tagged_sents(self, fileids=None):
         def f(s): return [(w, simple_tag(t)) for w, t in s]
-        return LazyMap(f, super().tagged_sents(fileids))
+        return list(LazyMap(f, super().tagged_sents(fileids)))
 
     def parsed_sents(self, fileids=None):
         def f(t):
@@ -108,7 +108,7 @@ class SimpleAncoraCorpusReader(AncoraCorpusReader):
                     t[p[:-1]].set_label(simple_tag(tag))
             return t
 
-        return LazyMap(f, super().parsed_sents(fileids))
+        return list(LazyMap(f, super().parsed_sents(fileids)))
 
 
 def simple_tag(t):
