@@ -34,6 +34,7 @@ if __name__ == '__main__':
 
     # train the model
     model_class = models[opts['-m']]
+    print(model_class)
     model = model_class(sents)
 
     # save it

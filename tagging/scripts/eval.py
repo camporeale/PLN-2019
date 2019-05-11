@@ -13,6 +13,7 @@ from docopt import docopt
 import pickle
 import sys
 from collections import defaultdict
+from tagging.evaluator import Evaluator
 
 from tagging.ancora import SimpleAncoraCorpusReader
 
@@ -33,3 +34,20 @@ if __name__ == '__main__':
 
     # tag and evaluate
     # WORK HERE!!
+    model_tags = []
+    true_tags = []
+    unk_tags = []
+    labels = []
+
+    for sent in sents:
+      model_tags += model.tag([x[0] for x in sent])
+      unk_tags  += [model.unknown(x[0]) for x in sent]
+      true_tags += [x[1] for x in sent]
+
+
+    evaluator = Evaluator()
+    evaluator.evaluate(true_tags,model_tags,unk_tags)
+    evaluator.print_results()
+    evaluator.print_confusion_matrix()
+
+
