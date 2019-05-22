@@ -44,7 +44,7 @@ class BaselineTagger:
 
         for sent in tagged_sents:
             for word, tag in sent:
-                wordtags[word][tag] +=1
+                wordtags[word][tag] += 1
 
         self._wordtags = dict(wordtags)
 
