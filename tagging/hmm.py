@@ -31,15 +31,40 @@ class HMM:
         if n == 1:
             return self._trans[tag]
         if prev_tags:
-            return self._trans[prev_tags][tag]
- 
+            return self._trans[prev_tags].get(tag, 0.0)
+
+    def trans_log_prob(self, tag, prev_tags):
+        """Probability of a tag.
+
+        tag -- the tag.
+        prev_tags -- tuple with the previous n-1 tags (optional only if n = 1).
+        """
+        prob = self.trans_prob(tag,prev_tags)
+
+        if prob == 0.0:
+            return -math.inf
+        else:
+            return math.log2(prob)
+
     def out_prob(self, word, tag):
         """Probability of a word given a tag.
  
         word -- the word.
         tag -- the tag.
         """
-        return self._out[tag][word]
+        return self._out[tag].get(word, 0.0)
+
+    def out_log_prob(self, word, tag):
+        """Probability of a word given a tag.
+
+        word -- the word.
+        tag -- the tag.
+        """
+        prob = self.out_prob(word,tag)
+        if prob == 0.0:
+            return -math.inf
+        else:
+            return math.log2(prob)
 
     def tag_prob(self, y):
         """
@@ -117,19 +142,54 @@ class ViterbiTagger:
         """
         hmm -- the HMM.
         """
- 
+        self._hmm = hmm
+
     def tag(self, sent):
         """Returns the most probable tagging for a sentence.
  
         sent -- the sentence.
         """
-        matrix = [{}]
-        tagset = self.tagset()
-        rows = len(sent)
-        cols = len(tagset)
+        hmm = self._hmm
+        n = hmm._n
 
-        #
-        max_prob = 1
+        self._pi = pi = {0: {("<s>",) * (n - 1): (math.log2(1), [])}}
+
+        m = len(sent)
+        tagset = hmm.tagset()
+
+        for k in range(1, m+1):
+            # print("column: ", k)
+            pi[k] = {}
+            for t in tagset:  # solo iterar sobre aquellos que tienen out_prob(sent[k-1], t) > 0
+                for prevtags in pi[k-1].keys():
+                    prevtags = prevtags[1:]  # controlar si la tupla viene vacía
+                    tags = prevtags + (t,)
+                    # print("row: ", tags)
+                    maxlogprob = -math.inf
+                    maxtag = None
+                    for w in tagset | {"<s>"}:
+                        # print((w,)+prevtags)
+                        if (w,)+prevtags in pi[k-1]:
+                            trans = hmm.trans_log_prob(t, ((w,) + prevtags))
+                            out = hmm.out_log_prob(sent[k-1], t)
+                            prob = pi[k-1][((w,)+prevtags)][0] + trans + out
+                            if prob > maxlogprob:
+                                maxlogprob = prob
+                                maxtag = pi[k-1][(w,)+prevtags][1]
+                    if maxlogprob > -math.inf:
+                        pi[k][tags] = (maxlogprob, maxtag + [t])
+
+        maxlogprob = -math.inf
+        sequence = None
+        for p, t in pi[k].items():
+            print("P: ",p," T: ",t)
+            prob = hmm.trans_log_prob("</s>", p) + t[0]
+            print("prob:",prob," maxlogprodb:", maxlogprob)
+            if prob > maxlogprob:
+                maxlogprob = prob
+                sequence = t[1]
+
+        return sequence
 
 
 class MLHMM(HMM):
