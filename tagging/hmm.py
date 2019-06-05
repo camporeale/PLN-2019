@@ -1,5 +1,6 @@
 import math
 from collections import defaultdict
+import time
 
 
 class HMM:
@@ -60,7 +61,7 @@ class HMM:
         word -- the word.
         tag -- the tag.
         """
-        prob = self.out_prob(word,tag)
+        prob = self.out_prob(word, tag)
         if prob == 0.0:
             return -math.inf
         else:
@@ -134,6 +135,9 @@ class HMM:
  
         sent -- the sentence.
         """
+        tagger = ViterbiTagger(self)
+
+        return tagger.tag(sent)
 
 
 class ViterbiTagger:
@@ -156,8 +160,9 @@ class ViterbiTagger:
 
         m = len(sent)
         tagset = hmm.tagset()
-
+        start = time.time()
         for k in range(1, m+1):
+
             # print("column: ", k)
             pi[k] = {}
             for t in tagset:  # solo iterar sobre aquellos que tienen out_prob(sent[k-1], t) > 0
@@ -182,12 +187,15 @@ class ViterbiTagger:
         maxlogprob = -math.inf
         sequence = None
         for p, t in pi[k].items():
-            print("P: ",p," T: ",t)
+            # print("P: ",p," T: ",t)
             prob = hmm.trans_log_prob("</s>", p) + t[0]
-            print("prob:",prob," maxlogprodb:", maxlogprob)
+            # print("prob:",prob," maxlogprodb:", maxlogprob)
             if prob > maxlogprob:
                 maxlogprob = prob
                 sequence = t[1]
+
+        end = time.time()
+        print(end - start)
 
         return sequence
 
@@ -235,7 +243,7 @@ class MLHMM(HMM):
  
         tokens -- the n-gram or (n-1)-gram tuple of tags.
         """
-        return self._ngram_count[tokens]
+        return self._ngram_count.get(tokens, 0)
 
     def unknown(self, w):
         """Check if a word is unknown for the model.
@@ -287,9 +295,21 @@ class MLHMM(HMM):
         if self.unknown(word):
             probability = 1 / len(self._vocab)
         else:
-            probability = tag_counts[word] / sum(tag_counts.values())
+            probability = tag_counts.get(word, 0) / sum(tag_counts.values())
 
         return probability
+
+    def out_log_prob(self, word, tag):
+        """Probability of a word given a tag.
+
+        word -- the word.
+        tag -- the tag.
+        """
+        prob = self.out_prob(word, tag)
+        if prob == 0.0:
+            return -math.inf
+        else:
+            return math.log2(prob)
 
     def tag_prob(self, y):
         """
@@ -359,3 +379,6 @@ class MLHMM(HMM):
 
         sent -- the sentence.
         """
+        tagger = ViterbiTagger(self)
+
+        return tagger.tag(sent)

@@ -5,26 +5,26 @@ Usage:
   train.py -h | --help
 
 Options:
-  -m <model>    Model to use [default: badbase]:
-                  badbase: Bad baseline
-                  base: Baseline
-                  mlhmm: MLHMM
+  -m <model>    Model to use [default: Three Words Classifier]:
+                  3w: ClassifierTagger
+                  ft: FastTextClassifier
+  -c <clf>      Classifier to use [default: LogisticRegression]:
+                  lr: Logistic Regression
+                  svm: LinearSVC
+                  mnb: MultinomialNB
   -o <file>     Output model file.
   -h --help     Show this screen.
-  -n <ngram>           N-gram value for MLHMM
 
 """
 from docopt import docopt
 import pickle
 
 from tagging.ancora import SimpleAncoraCorpusReader
-from tagging.baseline import BaselineTagger, BadBaselineTagger
-from tagging.hmm import MLHMM
+from tagging.classifier import ClassifierTagger
 
 models = {
-    'badbase': BadBaselineTagger,
-    'base': BaselineTagger,
-    'mlhmm': MLHMM
+    '3w': ClassifierTagger,
+    'ft': 'FastText - TO DO'
 }
 
 
@@ -39,10 +39,8 @@ if __name__ == '__main__':
     # train the model
     model_class = models[opts['-m']]
     print(opts['-m'])
-    if opts['-m'] == 'mlhmm':
-        model = model_class(int(opts['-n']), sents)
-    else:
-        model = model_class(sents)
+    model = model_class(sents, clf=opts['-c'])
+
 
     # save it
     filename = opts['-o']
