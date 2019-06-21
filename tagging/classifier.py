@@ -3,6 +3,7 @@ from sklearn.feature_extraction import DictVectorizer
 from sklearn.svm import LinearSVC
 from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import MultinomialNB
+from tagging.fasttext import FasttextDictVectorizer
 
 classifiers = {
     'lr': LogisticRegression,
@@ -93,10 +94,11 @@ class ClassifierTagger:
         sent -- the sentence.
         """
         # WORK HERE!!
-        tags = []
+        x = []
         for i in range(len(sent)):
-            tags.append(self._pipeline.predict(self.get_features(sent, i)))
+            x.append(feature_dict(sent, i))
 
+        tags = list(self._pipeline.predict(x))
         return tags
 
     def unknown(self, w):
@@ -119,11 +121,22 @@ class ClassifierTagger:
                 continue
             s, t = zip(*sent)
             vocab.update(s)
-            tags.append(t)
             for i in range(len(sent)):
                 features.append(feature_dict(s, i))
-        print(len(features), len(tags))
+                tags.append((t[i]))
         self.vocab = vocab
         return features, tags
 
 
+class FastTextClassifier(ClassifierTagger):
+    def __init__(self, tagged_sents, clf='lr'):
+
+        self._pipeline = Pipeline([
+            ('vect', FeatureUnion([
+                ('ft', FasttextDictVectorizer('tagging/models/cc.es.300.vec', ['pw', 'w', 'nw'])),
+                ('twv', DictVectorizer())
+            ])),
+            ('clf', classifiers[clf]())
+        ])
+
+        self.fit(tagged_sents)

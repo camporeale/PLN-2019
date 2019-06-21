@@ -3,7 +3,7 @@ from collections import defaultdict
 
 class BadBaselineTagger:
 
-    def __init__(self, tagged_sents):
+    def __init__(self):
         """
         tagged_sents -- training sentences, each one being a list of pairs.
         """

@@ -1,6 +1,5 @@
 import math
 from collections import defaultdict
-import time
 
 
 class HMM:
@@ -40,7 +39,7 @@ class HMM:
         tag -- the tag.
         prev_tags -- tuple with the previous n-1 tags (optional only if n = 1).
         """
-        prob = self.trans_prob(tag,prev_tags)
+        prob = self.trans_prob(tag, prev_tags)
 
         if prob == 0.0:
             return -math.inf
@@ -160,42 +159,40 @@ class ViterbiTagger:
 
         m = len(sent)
         tagset = hmm.tagset()
-        start = time.time()
+        # For every word, fill column
         for k in range(1, m+1):
-
-            # print("column: ", k)
             pi[k] = {}
-            for t in tagset:  # solo iterar sobre aquellos que tienen out_prob(sent[k-1], t) > 0
-                for prevtags in pi[k-1].keys():
-                    prevtags = prevtags[1:]  # controlar si la tupla viene vacía
-                    tags = prevtags + (t,)
-                    # print("row: ", tags)
-                    maxlogprob = -math.inf
-                    maxtag = None
-                    for w in tagset | {"<s>"}:
-                        # print((w,)+prevtags)
-                        if (w,)+prevtags in pi[k-1]:
-                            trans = hmm.trans_log_prob(t, ((w,) + prevtags))
-                            out = hmm.out_log_prob(sent[k-1], t)
-                            prob = pi[k-1][((w,)+prevtags)][0] + trans + out
-                            if prob > maxlogprob:
-                                maxlogprob = prob
-                                maxtag = pi[k-1][(w,)+prevtags][1]
-                    if maxlogprob > -math.inf:
-                        pi[k][tags] = (maxlogprob, maxtag + [t])
+            # Iterate in every possible tag
+            for t in tagset:
+                # Only if output probability is not 0, else go to next tag
+                outprob = hmm.out_log_prob(sent[k-1], t)
+                if outprob == -math.inf:
+                    continue
 
-        maxlogprob = -math.inf
+                # Iterate on previous possible paths
+                for prevtags in pi[k-1]:
+                    # Only if transition probability is not 0, else go to next path
+                    trans = hmm.trans_log_prob(t, prevtags)
+                    if trans == -math.inf:
+                        continue
+                    # Current tags and probability
+                    tags = prevtags[1:] + (t,)
+                    prob = pi[k - 1][prevtags][0] + trans + outprob
+                    maxtags = pi[k - 1][prevtags][1] + [t]
+
+                    # Check current column tags and probabilities
+                    if (tags not in pi[k]) or (pi[k][tags][0] < prob):
+                        pi[k][tags] = (prob, maxtags)
+
         sequence = None
-        for p, t in pi[k].items():
-            # print("P: ",p," T: ",t)
+        maxlogprob = -math.inf
+
+        # Calculate probability of every path + end-of-sentence-token
+        for p, t in pi[m].items():
             prob = hmm.trans_log_prob("</s>", p) + t[0]
-            # print("prob:",prob," maxlogprodb:", maxlogprob)
             if prob > maxlogprob:
                 maxlogprob = prob
                 sequence = t[1]
-
-        end = time.time()
-        print(end - start)
 
         return sequence
 
@@ -275,7 +272,7 @@ class MLHMM(HMM):
 
         if self._addone:
             tlen = len(self._tagset)
-            probability = float(tag_counts+1 / prev_counts+tlen)
+            probability = float((tag_counts+1) / (prev_counts+tlen))
         else:
             if tag_counts == 0 or prev_counts == 0:
                 probability = 0
@@ -294,22 +291,12 @@ class MLHMM(HMM):
         # calculate emmision probabilities
         if self.unknown(word):
             probability = 1 / len(self._vocab)
+        elif tag_counts == 0:
+            probability = 0
         else:
             probability = tag_counts.get(word, 0) / sum(tag_counts.values())
 
         return probability
-
-    def out_log_prob(self, word, tag):
-        """Probability of a word given a tag.
-
-        word -- the word.
-        tag -- the tag.
-        """
-        prob = self.out_prob(word, tag)
-        if prob == 0.0:
-            return -math.inf
-        else:
-            return math.log2(prob)
 
     def tag_prob(self, y):
         """
@@ -354,9 +341,9 @@ class MLHMM(HMM):
         tagging = tuple(["<s>"] * (n - 1) + y + ["</s>"])
 
         prob = 0
-        for i in range(len(tagging) - n + 1):
-            prob += math.log2(self.trans_prob(tagging[i+n-1], (tagging[i:i+n-1])))
 
+        for i in range(len(tagging) - n + 1):
+            prob += self.trans_log_prob(tagging[i+n-1], (tagging[i:i+n-1]))
         return prob
 
     def log_prob(self, x, y):

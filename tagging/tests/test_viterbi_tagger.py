@@ -40,8 +40,8 @@ class TestViterbiTagger(TestCase):
                 ('N', 'V'): (log2(0.4 * 0.9), ['D', 'N', 'V']),
             }
         }
-        self.assertEqualPi(tagger._pi, pi)
 
+        self.assertEqualPi(tagger._pi, pi)
         self.assertEqual(y, 'D N V'.split())
 
     def test_tag2(self):

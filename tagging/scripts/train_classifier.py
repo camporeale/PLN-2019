@@ -21,10 +21,11 @@ import pickle
 
 from tagging.ancora import SimpleAncoraCorpusReader
 from tagging.classifier import ClassifierTagger
+from tagging.classifier import FastTextClassifier
 
 models = {
     '3w': ClassifierTagger,
-    'ft': 'FastText - TO DO'
+    'ft': FastTextClassifier
 }
 
 
@@ -38,9 +39,7 @@ if __name__ == '__main__':
 
     # train the model
     model_class = models[opts['-m']]
-    print(opts['-m'])
     model = model_class(sents, clf=opts['-c'])
-
 
     # save it
     filename = opts['-o']
