@@ -3,6 +3,7 @@ Trabajo Práctico 2 - Etiquetado de Secuencias
 ==============================================
 
 
+
 Ejercicio 1 - Corpus AnCora: Estadísticas de etiquetas POS
 ----------------------------------------------------------
 
@@ -31,6 +32,7 @@ Ejercicio 2 - Baseline Tagger
 Se implementó la clase BaselineTagger que etiqueta cada palabra en base a su etiqueta más frecuente.
 
 
+
 Ejercicio 3: Entrenamiento y Evaluación de Taggers
 ----------------------------------------------------------
 
@@ -44,11 +46,13 @@ El BaselineTagger produjo los siguientes resultados:
    :width: 35pt
 
 
+
 Ejercicio 4: Hidden Markov Models y Algoritmo de Viterbi
 ----------------------------------------------------------
 
 - Se implementó la clase MLHMM
 - Se implementó la clase ViterbiTagger
+
 
 
 Ejercicio 5: HMM POS Tagger
@@ -73,6 +77,7 @@ Ejercicio 5: HMM POS Tagger
     - Time (real/user/sys): 19m12,318s / 19m0,915s / 0m5,356s
 
 
+
 Ejercicio 6: Three words classifier
 ----------------------------------------------------------
 
@@ -91,5 +96,12 @@ Para este ejercicio creamos un script de entrenamiento train_classifier.py, ser�
     - Time (real/user/sys): 2m53,696s / 1m29,830s / 1m23,520s
 
 
+
 Ejercicio 7: Clasificador con Word Embeddings fastText
 ----------------------------------------------------------
+
+Creamos la clase FastTextClassifier con los Embeddings de FastText. Creamos un solo modelo usando LogisticRegression ya
+que es la que mejor resultados nos dió en el ejercicio anterior. El resultado fue el siguiente:
+
+    - Accuracy (total/known/unknown): 96.40% / 97.37% / 87.55%
+    - Time (real/user/sys): 0m44,485s / 0m19,267s / 0m15,250s
